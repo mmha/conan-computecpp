@@ -1,21 +1,72 @@
 from conans import ConanFile, tools
 import os
 
+
 class ComputeCppConan(ConanFile):
     name = "computecpp"
     version = "0.8.0"
+    url = "https://codeplay.com/"
+    description = "A heterogeneous parallel programming platform that provides a beta pre-conformant implementantion of SYCL 1.2.1 Khronos specification"
     generators = "virtualenv"
     no_copy_source = True
-    exports_sources = "ComputeCpp-CE-*-Ubuntu.16.04-64bit.tar.gz", "cmake/*"
+    exports_sources = "cmake/*", "ComputeCpp-CE-*.tar.gz"
+    settings = {
+        "os": ["Linux", "Windows"],
+        "arch": ["x86_64", "armv7hf", "armv8"]
+    }
+    source_name = ""
+    source_tarball = ""
+    source_unpacked_name = ""
+
+    def configure(self):
+        if self.settings.os == "Windows":
+            distribution = "Windows.7"
+        elif self.settings.os == "Linux":
+            if tools.os_info.linux_distro == "ubuntu":
+                name = "Ubuntu"
+                version = tools.os_info.os_version if tools.os_info.os_version in [
+                    "14.04", "16.04"
+                ] else "16.04"
+                distribution = "%s.%s" % (name, version)
+                unpacked_distribution = distribution = "%s-%s" % (name,
+                                                                  version)
+            elif tools.os_info.linux_distro == "centos":
+                name = "CentOS"
+                distribution = name
+                distribution = name
+            else:
+                distribution = "Ubuntu.16.04"
+                unpacked_distribution = "Ubuntu-16.04"
+
+        if self.settings.arch == "x86_64":
+            arch = "64bit"
+            unpacked_architecture = "x86_64"
+        elif self.settings.arch.startswith("armv8"):
+            arch = "arm64"
+            unpacked_architecture = "ARM_64"
+        elif self.settings.arch.startswith("arm"):
+            arch = "arm32"
+            unpacked_architecture = "ARM_32"
+
+        self.source_name = "ComputeCpp-CE-%s-%s-%s" % (self.version,
+                                                       distribution, arch)
+        self.source_tarball = self.source_name + ".tar.gz"
+        self.source_unpacked_name = "ComputeCpp-CE-%s-%s-%s" % (
+            self.version, unpacked_distribution, unpacked_architecture)
+        print(self.source_unpacked_name)
 
     def package(self):
-        archive = os.path.join(self.source_folder, "ComputeCpp-CE-%s-Ubuntu.16.04-64bit.tar.gz" % self.version)
+        archive = os.path.join(self.source_folder, self.source_tarball)
         cmake = os.path.join(self.source_folder, "cmake")
         tools.untargz(archive)
-        self.copy("*", src="ComputeCpp-CE-%s-Ubuntu-16.04-x86_64" % self.version)
+        self.copy("*", src=self.source_unpacked_name)
         self.copy("*", src=cmake, dst="share/cmake/ComputeCpp")
 
     def package_info(self):
-        self.cpp_info.libs = ["libComputeCpp.so"]
+        if self.settings.os == "Linux":
+            self.cpp_info.libs = ["libComputeCpp.so"]
+        elif self.settings.os == "Windows":
+            self.cpp_info.libs = ["ComputeCpp-vs2015.lib"]
+
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
         self.user_info.ComputeCpp_DIR = self.package_folder
