@@ -15,6 +15,8 @@ conan create . codeplay/testing
 ```
 
 ## Using ComputeCpp with CMake
+> Note that the `FindComputeCpp.cmake` module from the SDK will still work with the conan package.
+
 The recipe also installs an experimental set of CMake modules that integrate SYCL tightly into CMake such that enabling SYCL is as simple as `find_package(ComputeCpp)`:
 
 
