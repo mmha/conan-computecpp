@@ -1,12 +1,13 @@
 from conans import ConanFile, tools
 import os
-
+import errno
 
 class ComputeCppConan(ConanFile):
     name = "computecpp"
     version = "0.8.0"
     url = "https://codeplay.com/"
     description = "A heterogeneous parallel programming platform that provides a beta pre-conformant implementantion of SYCL 1.2.1 Khronos specification"
+    license="proprietary"
     generators = "virtualenv"
     no_copy_source = True
     exports_sources = "cmake/*", "ComputeCpp-CE-*.tar.gz"
@@ -33,8 +34,8 @@ class ComputeCppConan(ConanFile):
             elif tools.os_info.linux_distro == "centos":
                 name = "CentOS"
                 distribution = name
-                distribution = name
             else:
+                self.output.warn("You are using an unsupported distribution. Reverting to the Ubuntu 16.04 package...")
                 distribution = "Ubuntu.16.04"
                 unpacked_distribution = "Ubuntu-16.04"
 
@@ -53,7 +54,14 @@ class ComputeCppConan(ConanFile):
         self.source_tarball = self.source_name + ".tar.gz"
         self.source_unpacked_name = "ComputeCpp-CE-%s-%s-%s" % (
             self.version, unpacked_distribution, unpacked_architecture)
-        print(self.source_unpacked_name)
+
+        self.output.info("Distribution: " + distribution)
+        self.output.info("Target architecture: " + arch)
+        self.output.info("Expected tarball name: " + self.source_tarball)
+        if not os.path.isfile(self.source_tarball):
+            error_msg = self.source_tarball + " not found. Please ensure you downloaded the appropriate package for your operating system from https://developer.codeplay.com"
+            self.output.error(error_msg)
+            raise OSError(error_msg)
 
     def package(self):
         archive = os.path.join(self.source_folder, self.source_tarball)
@@ -70,3 +78,6 @@ class ComputeCppConan(ConanFile):
 
         self.env_info.PATH.append(os.path.join(self.package_folder, "bin"))
         self.user_info.ComputeCpp_DIR = self.package_folder
+
+    def package_id(self):
+        self.info.settings.source = self.source_tarball
