@@ -6,6 +6,16 @@ This repository contains a recipe for repackaging ComputeCpp as a conan package 
 
 ---------------
 
+## Prerequisites
+- [CMake 3.7 or greater](https://cmake.org/)
+- [Conan](https://conan.io/)
+
+Both CMake and Conan are also available on `pip`:
+
+```bash
+pip install --user cmake conan
+```
+
 ## Creating a Conan package
 The conan recipe won't download ComputeCpp by itself. You need to download it from the [Codeplay website](https://developer.codeplay.com) and place the tarball into the same directory as `conanfile.py`. After that, you can create your package as usual:
 
@@ -23,7 +33,7 @@ The recipe also installs an experimental set of CMake modules that integrate SYC
 **CMakeLists.txt**
 
 ```cmake
-cmake_minimum_required(VERSION 3.4)
+cmake_minimum_required(VERSION 3.7)
 project(hello_sycl)
 
 # The usual conan boilerplate
