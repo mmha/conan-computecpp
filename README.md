@@ -112,11 +112,6 @@ To make SYCL opt-in, you have to enable the `CXX` language after the `find_packa
 cmake_minimum_required(VERSION 3.4)
 project(hello_sycl LANGUAGES C)
 
-if(EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-    conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
-endif()
-
 find_package(ComputeCpp REQUIRED)
 enable_language(CXX)
 
