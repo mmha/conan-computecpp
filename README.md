@@ -36,12 +36,6 @@ The recipe also installs an experimental set of CMake modules that integrate SYC
 cmake_minimum_required(VERSION 3.7)
 project(hello_sycl)
 
-# The usual conan boilerplate
-if(EXISTS "${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-    include("${CMAKE_BINARY_DIR}/conanbuildinfo.cmake")
-    conan_basic_setup(TARGETS NO_OUTPUT_DIRS)
-endif()
-
 # This will enable SYCL as a CMake language and set compute++ to be its compiler
 find_package(ComputeCpp REQUIRED)
 
@@ -57,7 +51,7 @@ add_executable(app my_parallel_code.cpp)
 computecpp/0.8.0@codeplay/testing
 
 [generators]
-cmake
+cmake_paths
 ```
 
 **Build process:**
@@ -66,7 +60,7 @@ cmake
 mkdir build
 cd build
 conan install ..
-cmake .. [-GNinja]
+cmake .. -DCMAKE_TOOLCHAIN_FILE=conan_paths.cmake [-GNinja]
 ninja
 ```
 
