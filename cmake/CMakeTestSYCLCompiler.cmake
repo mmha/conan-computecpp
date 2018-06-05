@@ -1,3 +1,7 @@
+# This file is based on CMake's CMakeTest*Compiler.cmake
+# Distributed under the OSI-approved BSD 3-Clause License.
+# See https://cmake.org/licensing for details.
+
 include(CMakeTestCompilerCommon)
 unset(CMAKE_SYCL_COMPILER_WORKS CACHE)
 

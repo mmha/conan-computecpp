@@ -1,3 +1,7 @@
+# This file is based on CMake's CMake*Information.cmake
+# Distributed under the OSI-approved BSD 3-Clause License.
+# See https://cmake.org/licensing for details.
+
 if(UNIX)
   set(CMAKE_SYCL_OUTPUT_EXTENSION .o)
 else()

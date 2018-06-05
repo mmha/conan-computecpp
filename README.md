@@ -126,3 +126,8 @@ set_source_files_properties(my_parallel_code.cpp PROPERTIES LANGUAGE SYCL)
 - The rpath won't be set correctly unless the `LINKER_LANGUAGE` of the target is forced to `CXX`
 - `CMAKE_CXX_STANDARD`, `CMAKE_SYCL_STANDARD` and compile features are not supported. This will probably require an upstream change to CMake.
 - TriSYCL is not supported yet
+
+## License
+The build scripts are license under the Apache 2.0 license. Check the ComputeCpp end user agreement for the license of ComputeCpp itself.
+
+The CMake modules are based on upstream CMake modules. Please see the files for their respective licences.

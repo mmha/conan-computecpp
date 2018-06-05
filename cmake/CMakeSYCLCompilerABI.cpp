@@ -1,3 +1,6 @@
+// This file is based on CMake's CMake*CompilerId.cpp.in
+// Distributed under the OSI-approved BSD 3-Clause License.
+// See https://cmake.org/licensing for details.
 
 /* Size of a pointer-to-data in bytes.  */
 #define SIZEOF_DPTR (sizeof(void*))

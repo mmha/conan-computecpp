@@ -1,3 +1,7 @@
+# This file is based on CMake's CMakeDetermine*Compiler.cmake
+# Distributed under the OSI-approved BSD 3-Clause License.
+# See https://cmake.org/licensing for details.
+
 set(CMAKE_SYCL_SDK_INCLUDE_DIRECTORIES ${COMPUTECPP_INCLUDE_DIRS})
 set(CMAKE_SYCL_SDK_LINK_LIBRARIES ${COMPUTECPP_RUNTIME_LIBRARY})
 
