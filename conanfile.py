@@ -5,12 +5,14 @@ import errno
 
 class ComputeCppConan(ConanFile):
     name = "computecpp"
-    version = "0.8.0"
+    version = "0.9.1"
     url = "https://codeplay.com/"
     description = "A heterogeneous parallel programming platform that provides a beta pre-conformant implementantion of SYCL 1.2.1 Khronos specification"
     license = "proprietary"
     no_copy_source = True
     exports_sources = "cmake/*", "ComputeCpp-CE-*.tar.gz"
+    options = {"sycl_language": [False, True]}
+    default_options = "sycl_language=True"
     settings = {
         "os": ["Linux", "Windows"],
         "arch": ["x86_64", "armv7hf", "armv8"]
@@ -75,9 +77,10 @@ class ComputeCppConan(ConanFile):
         tools.untargz(archive)
 
     def package(self):
-        cmake = os.path.join(self.source_folder, "cmake")
-        self.copy("*", src=cmake, dst="share/cmake/ComputeCpp")
         self.copy("*", src=self.source_unpacked_name)
+        if self.options.sycl_language:
+            cmake = os.path.join(self.source_folder, "cmake")
+            self.copy("*", src=cmake, dst="share/cmake/ComputeCpp")
 
     def package_info(self):
         if self.settings.os == "Linux":
